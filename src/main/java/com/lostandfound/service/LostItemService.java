@@ -1,5 +1,6 @@
 package com.lostandfound.service;
 
+import com.lostandfound.exception.ResourceNotFoundException;
 import com.lostandfound.model.LostItem;
 import com.lostandfound.repository.LostItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,26 @@ public class LostItemService {
             item.setDateReported(LocalDate.now());
         }
         return lostItemRepository.save(item);
+    }
+
+    public LostItem getItemById(Long id) {
+        return lostItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + id));
+    }
+
+    public LostItem updateItem(Long id, LostItem itemDetails) {
+        LostItem existingItem = getItemById(id);
+        existingItem.setTitle(itemDetails.getTitle());
+        existingItem.setDescription(itemDetails.getDescription());
+        existingItem.setCategory(itemDetails.getCategory());
+        existingItem.setLocation(itemDetails.getLocation());
+        existingItem.setFound(itemDetails.isFound());
+        return lostItemRepository.save(existingItem);
+    }
+
+    public void deleteItem(Long id) {
+        LostItem existingItem = getItemById(id);
+        lostItemRepository.delete(existingItem);
     }
 
 

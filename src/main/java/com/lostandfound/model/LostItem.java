@@ -19,6 +19,7 @@ public class LostItem {
 
     private String title;
     private String description;
+    private String category;
     private String location;
     private LocalDate dateReported;
     private boolean isFound;
